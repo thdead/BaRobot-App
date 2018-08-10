@@ -1,13 +1,26 @@
 <ion-content class="no-scroll">
   <ion-slides>
+
+    <!-- Page Acceuil -->
     <ion-slide>
-      <ion-img src="../../assets/Logo.png" class="homeIcon" (click)="goToSlide(1)" ></ion-img>
+      <ion-img src="../../assets/Logo.png" class="homeIcon" (click)="goToSlide(1,1000)" ></ion-img>
     </ion-slide>
+
+    <!-- Page du menu de navigation -->
     <ion-slide>
       <page-menu></page-menu>
     </ion-slide>
+
+    <!-- Page de la confection d'une boisson -->
     <ion-slide>
       <h1>Slide 3</h1>
     </ion-slide>
+
+    <!-- Page de configuration de la machine -->
+    <ion-slide>
+      <h1>Slide 4</h1>
+    </ion-slide>
+
+
   </ion-slides>
 </ion-content>
