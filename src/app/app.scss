@@ -34,7 +34,7 @@ ion-slide {
     background: transparent;
 }
 
-.param {
+.iconApp {
     font-size: 50px;
 }
 
@@ -46,3 +46,19 @@ ion-col {
     width: 100%;
     height: 100%;
 }
+
+ion-icon {
+    &[class*="custom-"] {
+      mask-size: contain;
+      mask-position: 50% 50%;
+      mask-repeat: no-repeat;
+      background: currentColor;
+      width: 1em;
+      height: 1em;
+    }
+  
+    &[class*="custom-bottle"] {
+      mask-image: url(../assets/bottle.svg);
+    }
+  
+  }
