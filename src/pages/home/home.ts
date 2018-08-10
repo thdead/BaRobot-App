@@ -1,7 +1,8 @@
+import { MenuPage } from './../menu/menu';
 import { Component, ViewChild } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Slides } from 'ionic-angular/index';
-import { AlertController } from 'ionic-angular';
+
 
 @Component({
   selector: 'page-home',
@@ -16,8 +17,8 @@ export class HomePage {
 
   }
 
-  goToSlide() {
-    this.slides.slideTo(2, 5000);
+  public goToSlide(num) {
+    this.slides.slideTo(num, 1000);
   }
 
 }
