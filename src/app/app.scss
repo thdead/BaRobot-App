@@ -20,7 +20,7 @@
 }
 
 ion-slide {
-    background-color: map-get($colors, dark);
+    background-color: map-get($colors, background);
 }
 
 .no-scroll .scroll-content{
@@ -78,3 +78,4 @@ ion-icon {
 .onOff {
     margin-top: 0.5px;
 }
+

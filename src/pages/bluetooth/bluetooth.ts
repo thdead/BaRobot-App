@@ -20,6 +20,7 @@ export class BluetoothPage {
   listOfDevices: Array<any> = [];
   tempArray: Array<any>;
   loading;
+  isConnected:Boolean = false;
   
 
   devices: Array<any> = [];
@@ -49,126 +50,165 @@ export class BluetoothPage {
  * ------------------------------------------------------------------------------------------------------------------------------
  */
 
-// test si le bluetooth est activé
-isBtEnable() {
-  this.bluetoothSerial.isEnabled().then(
-    success =>{
-      this.toSend = "Bluetooth is enabled";
-      this.foundBluethooth();
-    },
-    fail => {
-      this.toSend = "Bluetooth is *not* enabled";
-      this.alertBluetooth();
-    }
-  );
-}
+  // test si le bluetooth est activé
+  isBtEnable() {
+    this.bluetoothSerial.isEnabled().then(
+      success =>{
+        this.createToast("Bluetooth is enabled");
+        this.foundBluethooth();
+      },
+      fail => {
+        this.createToast("Bluetooth is *not* enabled");
+        this.alertBluetooth();
+      }
+    );
+  }
 
-// alerte pour demander d'activer le bluetooth
-alertBluetooth() {
-  let alert = this.alertCtrl.create({
-    title: 'Bluetooth',
-    message: 'Voulez vous activer le Bluetooth ?',
-    buttons: [
-      {
-        text: 'Oui',
-        handler: () => {
-          this.enableBluetooth();
+  // alerte pour demander d'activer le bluetooth
+  alertBluetooth() {
+    let alert = this.alertCtrl.create({
+      title: 'Bluetooth',
+      message: 'Voulez vous activer le Bluetooth ?',
+      buttons: [
+        {
+          text: 'Oui',
+          handler: () => {
+            this.enableBluetooth();
+          }
+        },
+        {
+          text: 'Non',
+          handler: () => {
+            console.log('Close');
+          }
         }
+      ]
+    });
+    alert.present();
+  }
+
+  // active le bluetooth
+  enableBluetooth() {
+    this.bluetoothSerial.enable().then(
+      success =>{
+        this.createToast("Bluetooth is now enabled");
+      },
+      fail => {
+        this.createToast("The user did *not* enable Bluetooth");
+      }
+    );
+  }
+
+  // cherche les périphériques disponibles
+  foundBluethooth(){
+    this.startLoaderBt();
+    this.bluetoothSerial.isEnabled().then(
+      success =>{
+        this.createToast("Bluetooth is enabled");
+        this.createToast("Loading Bluetooth Devices");
+        this.bluetoothSerial.discoverUnpaired().then(
+          success => {
+            if (success.length > 0) {
+              this.listOfDevices = success;
+              this.createToast("Bluetooth Devices are loaded");
+              this.stopLoaderBt();
+              this.alertBluetoothConnect();
+            } else {
+              this.stopLoaderBt();
+              this.createToast('Aucun appareil trouvé');
+            }
+            
+          }
+        );
+      },
+      fail => {
+        this.stopLoaderBt();
+        this.createToast("Bluetooth is *not* enabled");
+      }
+    );
+  }
+
+  // alert avec la liste des périphérique bluetooth 
+  alertBluetoothConnect() {
+    let tempArray:Array <any> = [];
+    this.listOfDevices.forEach(
+      device => {
+        tempArray.push({type:'radio',label: device.name + ' (' + device.id + ')',value:device.id})
+      }
+    );
+
+    let alert = this.alertCtrl.create({
+      title: 'Bluetooth',
+      message: 'Selectionner le périphérique..',
+      inputs : tempArray,
+      buttons : [
+      {
+          text: "Quitter",
+          handler: data => {
+          console.log("cancel clicked");
+          }
       },
       {
-        text: 'Non',
-        handler: () => {
-          console.log('Close');
-        }
+          text: "Connecter",
+          handler: data => {
+          this.createToast("Radio button selected : " + data);
+          this.connectTo(data);
+          }
+      }]});
+      alert.present();
+  }
+
+  connectTo(id) {
+    this.bluetoothSerial.connect(id).subscribe(
+      succes => {
+        this.createToast('connected');
+        this.isConnected = true;
+      },
+      fail => {
+        this.createToast(`Erreur de connexion: ${JSON.stringify(fail)}`);
       }
-    ]
-  });
-  alert.present();
-}
-
-// active le bluetooth
-enableBluetooth() {
-  this.bluetoothSerial.enable().then(
-    success =>{
-      this.toSend ="Bluetooth is now enabled";
-    },
-    fail => {
-      this.toSend = "The user did *not* enable Bluetooth";
-    }
-  );
-}
-
-// cherche les périphériques disponibles
-foundBluethooth(){
-  this.startLoaderBt();
-  this.bluetoothSerial.isEnabled().then(
-    success =>{
-      this.toSend = "Bluetooth is enabled";
-      this.toSend = "Loading Bluetooth Devices";
-      this.bluetoothSerial.discoverUnpaired().then(
-        success => {
-          this.listOfDevices = success;
-          this.toSend = "Done";
-          this.stopLoaderBt();
-          this.alertBluetoothConnect();
-        }
-      );
-    },
-    fail => {
-      this.stopLoaderBt();
-      this.toSend = "Bluetooth is *not* enabled";
-    }
-  );
-}
-
-// alert avec la liste des périphérique bluetooth 
-alertBluetoothConnect() {
-  let tempArray:Array <any> = [];
-  this.listOfDevices.forEach(
-    device => {
-      tempArray.push({type:'radio',label: device.name + ' (' + device.id + ')',value:device.id})
-    }
-  );
-
-  let alert = this.alertCtrl.create({
-    title: 'Bluetooth',
-    message: 'Selectionner le périphérique..',
-    inputs : tempArray,
-    buttons : [
-    {
-        text: "Quitter",
-        handler: data => {
-        console.log("cancel clicked");
-        }
-    },
-    {
-        text: "Connecter",
-        handler: data => {
-        console.log("Radio button selected : " + data);
-        }
-    }]});
-    alert.present();
-}
-
-// créer un loader
-startLoaderBt() {
-  this.loading = this.loadingCtrl.create({
-    content: 'Recherche de périphériques Bluetooth...'
-  });
-
-  this.loading.present();
-}
-// supprime le loader
-stopLoaderBt() {
-  this.loading.dismiss();
-}
+    );
+  }
 
 
-/**
- * ------------------------------------------------------------------------------------------------------------------------------
- * ------------------------------------------------------------------------------------------------------------------------------
- * ------------------------------------------------------------------------------------------------------------------------------
- */
+
+  /**
+   * ------------------------------------------------------------------------------------------------------------------------------
+  **/
+
+  // créer un loader
+  startLoaderBt() {
+    this.loading = this.loadingCtrl.create({
+      content: 'Recherche de périphériques Bluetooth...'
+    });
+
+    this.loading.present();
+  }
+  // supprime le loader
+  stopLoaderBt() {
+    this.loading.dismiss();
+  }
+
+  // créer un toast
+  createToast(msg) {
+    let toast = this.toastCtrl.create({
+      message: msg,
+      duration: 3000,
+      position: 'bottom'
+    });
+
+    toast.onDidDismiss(() => {
+      console.log('Dismissed toast');
+    });
+
+    toast.present();
+  }
+
+  /**
+   * ------------------------------------------------------------------------------------------------------------------------------
+   * ------------------------------------------------------------------------------------------------------------------------------
+   * ------------------------------------------------------------------------------------------------------------------------------
+   */
 
   /**
    * Recherchez les périphériques Bluetooth disponibles, évaluez s'il est possible d'utiliser la fonctionnalité

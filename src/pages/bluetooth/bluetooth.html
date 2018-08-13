@@ -1,30 +1,23 @@
 <ion-header>
 
-  <ion-navbar color="dark">
+  <ion-navbar [color]="this.isConnected ? 'light' : 'dark'">
     
     <ion-title>
-      <span class="top">Bar Robot (XXX - XXX - XXX)</span> &ensp;
-      <ion-icon name="checkmark-circle" class="onOff" color="on"></ion-icon>
+      <span class="top">BarRobot (00:14:03:05:5A:1D)</span>  &nbsp;
+      <ion-icon name="checkmark-circle" class="onOff" [color]="this.isConnected ? 'on' : 'off'"></ion-icon>
     </ion-title>
   </ion-navbar>
 
 </ion-header>
-
 
 <ion-grid>
   <ion-row>
     <ion-input type="text" placeholder="Input To Send" disabled="true" name="toSend" [(ngModel)]="toSend"></ion-input><ion-icon name="send" class="icoSend"></ion-icon>
   </ion-row>
   <ion-row>
-    <ion-col col-6 (click)="isBtEnable()">
-      <ion-icon name="cog" color="primary" class="iconApp" ></ion-icon>
-    </ion-col>
-    <ion-col col-6 (click)="foundBluethooth()">
-      <ion-icon name="bluetooth" color="third" class="iconApp"></ion-icon>
+    <ion-col col-12 (click)="isBtEnable()">
+      <ion-icon name="power" color="primary" class="iconApp" ></ion-icon>
     </ion-col>
   </ion-row>
-  <ion-row *ngFor="let device of listOfDevices">
-    <ion-col col-3></ion-col>
-  <ion-col col-3></ion-col>
-  </ion-row>
+
 </ion-grid>
