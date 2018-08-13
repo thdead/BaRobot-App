@@ -9,5 +9,8 @@ import { BluetoothPage } from './bluetooth';
   imports: [
     IonicPageModule.forChild(BluetoothPage),
   ],
+  exports: [
+    BluetoothPage
+  ]
 })
 export class BluetoothPageModule {}
