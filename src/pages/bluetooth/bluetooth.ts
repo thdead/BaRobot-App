@@ -18,6 +18,7 @@ export class BluetoothPage {
 
   toSend: string = "";
   listOfDevices: Array<any> = [];
+  tempArray: Array<any>;
   loading;
   
 
@@ -48,6 +49,19 @@ export class BluetoothPage {
  * ------------------------------------------------------------------------------------------------------------------------------
  */
 
+// test si le bluetooth est activé
+isBtEnable() {
+  this.bluetoothSerial.isEnabled().then(
+    success =>{
+      this.toSend = "Bluetooth is enabled";
+      this.foundBluethooth();
+    },
+    fail => {
+      this.toSend = "Bluetooth is *not* enabled";
+      this.alertBluetooth();
+    }
+  );
+}
 
 // alerte pour demander d'activer le bluetooth
 alertBluetooth() {
@@ -72,6 +86,70 @@ alertBluetooth() {
   alert.present();
 }
 
+// active le bluetooth
+enableBluetooth() {
+  this.bluetoothSerial.enable().then(
+    success =>{
+      this.toSend ="Bluetooth is now enabled";
+    },
+    fail => {
+      this.toSend = "The user did *not* enable Bluetooth";
+    }
+  );
+}
+
+// cherche les périphériques disponibles
+foundBluethooth(){
+  this.startLoaderBt();
+  this.bluetoothSerial.isEnabled().then(
+    success =>{
+      this.toSend = "Bluetooth is enabled";
+      this.toSend = "Loading Bluetooth Devices";
+      this.bluetoothSerial.discoverUnpaired().then(
+        success => {
+          this.listOfDevices = success;
+          this.toSend = "Done";
+          this.stopLoaderBt();
+          this.alertBluetoothConnect();
+        }
+      );
+    },
+    fail => {
+      this.stopLoaderBt();
+      this.toSend = "Bluetooth is *not* enabled";
+    }
+  );
+}
+
+// alert avec la liste des périphérique bluetooth 
+alertBluetoothConnect() {
+  let tempArray:Array <any> = [];
+  this.listOfDevices.forEach(
+    device => {
+      tempArray.push({type:'radio',label: device.name + ' (' + device.id + ')',value:device.id})
+    }
+  );
+
+  let alert = this.alertCtrl.create({
+    title: 'Bluetooth',
+    message: 'Selectionner le périphérique..',
+    inputs : tempArray,
+    buttons : [
+    {
+        text: "Quitter",
+        handler: data => {
+        console.log("cancel clicked");
+        }
+    },
+    {
+        text: "Connecter",
+        handler: data => {
+        console.log("Radio button selected : " + data);
+        }
+    }]});
+    alert.present();
+}
+
 // créer un loader
 startLoaderBt() {
   this.loading = this.loadingCtrl.create({
@@ -80,91 +158,11 @@ startLoaderBt() {
 
   this.loading.present();
 }
+// supprime le loader
 stopLoaderBt() {
   this.loading.dismiss();
 }
 
-
-alertBluetoothConnect() {
-  let tempArray;
-  this.listOfDevices.forEach(device => {
-      tempArray.push({
-        type: "radio",
-        label: device.name,
-        value: device.id
-      })
-    
-  });
-
-
-  let alert = this.alertCtrl.create({
-    title: 'Bluetooth',
-    message: 'Select option ',
-    inputs : tempArray,
-    buttons : [
-    {
-        text: "Cancel",
-        handler: data => {
-        console.log("cancel clicked");
-        }
-    },
-    {
-        text: "Search",
-        handler: data => {
-        console.log("search clicked");
-        }
-    }]});
-    alert.present();
-}
-
- // test si le bluetooth est activé, si non il va proposer de l'activé
-  public isBtEnable() {
-    this.bluetoothSerial.isEnabled().then(
-      success =>{
-        this.toSend = "Bluetooth is enabled";
-        this.alertBluetoothConnect();
-      },
-      fail => {
-        this.toSend = "Bluetooth is *not* enabled";
-        this.alertBluetooth();
-      }
-    );
-  }
-
-// active le bluetooth
-  public enableBluetooth() {
-    this.bluetoothSerial.enable().then(
-      success =>{
-        this.toSend ="Bluetooth is now enabled";
-      },
-      fail => {
-        this.toSend = "The user did *not* enable Bluetooth";
-      }
-    );
-  }
-
-// cherche les périphériques disponibles
-
-  public foundBluethooth(){
-    this.startLoaderBt();
-    this.bluetoothSerial.isEnabled().then(
-      success =>{
-        this.toSend = "Bluetooth is enabled";
-        this.toSend = "Loading Bluetooth Devices";
-        this.bluetoothSerial.discoverUnpaired().then(
-          success => {
-            this.listOfDevices = success;
-            this.toSend = "Done";
-            this.alertBluetoothConnect();
-          }
-        );
-      },
-      fail => {
-        this.toSend = "Bluetooth is *not* enabled";
-      }
-    );
-    this.stopLoaderBt();
-  }
 
 /**
  * ------------------------------------------------------------------------------------------------------------------------------

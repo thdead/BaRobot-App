@@ -1,3 +1,16 @@
+<ion-header>
+
+  <ion-navbar color="dark">
+    
+    <ion-title>
+      <span class="top">Bar Robot (XXX - XXX - XXX)</span> &ensp;
+      <ion-icon name="checkmark-circle" class="onOff" color="on"></ion-icon>
+    </ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
 <ion-grid>
   <ion-row>
     <ion-input type="text" placeholder="Input To Send" disabled="true" name="toSend" [(ngModel)]="toSend"></ion-input><ion-icon name="send" class="icoSend"></ion-icon>
@@ -12,15 +25,6 @@
   </ion-row>
   <ion-row *ngFor="let device of listOfDevices">
     <ion-col col-3></ion-col>
-    <ion-col col-3>
-      {{ device.class }}
-      <br>
-      {{ device.id }}
-      <br>
-      {{ device.address }}
-      <br>
-      {{ device.name }}
-  </ion-col>
   <ion-col col-3></ion-col>
   </ion-row>
 </ion-grid>
