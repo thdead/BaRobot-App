@@ -1,5 +1,5 @@
 import { Component, Injectable } from '@angular/core';
-import { IonicPage, Platform, ToastController, AlertController, Refresher } from 'ionic-angular';
+import { Platform, ToastController, AlertController, Refresher } from 'ionic-angular';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
 import { Observable } from 'rxjs';
 import { ISubscription } from "rxjs/Subscription";
@@ -10,15 +10,14 @@ import { ISubscription } from "rxjs/Subscription";
  * @see [Bluetooth Serial](https://ionicframework.com/docs/native/bluetooth-serial/)
  */
 @Injectable()
-@IonicPage({
-  name: 'BluetoothPage',
-  priority: 'high'
-})
 @Component({
   selector: 'bluetooth-page',
   templateUrl: 'bluetooth.html'
 })
 export class BluetoothPage {
+
+  toSend: string = "";
+  listOfDevices: Array<any> = [];
 
   devices: Array<any> = [];
   mostrarSpiner = true;
@@ -27,6 +26,8 @@ export class BluetoothPage {
   conexionMensajes: ISubscription;
   reader: Observable<any>;
   rawListener;
+
+
 
   constructor(
     private platform: Platform,
@@ -38,6 +39,7 @@ export class BluetoothPage {
    * En entrant dans la fenêtre, il exécute la fonction de recherche des périphériques Bluetooth.
    */
   ionViewDidEnter() {
+    console.log('Recherche de périférique')
     this.platform.ready().then(() => {
       this.buscarBluetooth().then((success: Array<Object>) => {
         this.devices = success;
@@ -54,6 +56,64 @@ export class BluetoothPage {
   public ngOnDestroy() {
     this.desconectar();
   }
+
+ /**
+ * ------------------------------------------------------------------------------------------------------------------------------
+ * ------------------------------------------------------------------------------------------------------------------------------
+ * ------------------------------------------------------------------------------------------------------------------------------
+ */
+
+// edit l'input text
+public editInput(){
+  this.toSend = 'Bonjour';
+}
+
+ // test si le bluetooth est activé, si non il va proposer de l'activé
+  public isEnable() {
+    this.bluetoothSerial.isEnabled().then(
+      success =>{
+        this.toSend = "Bluetooth is enabled";
+      },
+      fail => {
+        this.toSend = "Bluetooth is *not* enabled";
+        this.bluetoothSerial.enable().then(
+          success =>{
+            this.toSend ="Bluetooth is now enabled";
+          },
+          fail => {
+            this.toSend = "The user did *not* enable Bluetooth";
+          }
+        );
+      }
+    );
+  }
+
+// cherche les périphériques disponibles
+
+  public foundBluethooth(){
+    this.bluetoothSerial.isEnabled().then(
+      success =>{
+        this.toSend = "Bluetooth is enabled";
+        this.toSend = "Loading Bluetooth Devices";
+        this.bluetoothSerial.discoverUnpaired().then(
+          success => {
+            this.listOfDevices = success;
+            this.toSend = "Done";
+          }
+        );
+      },
+      fail => {
+        this.toSend = "Bluetooth is *not* enabled";
+      }
+    );
+  }
+
+/**
+ * ------------------------------------------------------------------------------------------------------------------------------
+ * ------------------------------------------------------------------------------------------------------------------------------
+ * ------------------------------------------------------------------------------------------------------------------------------
+ */
+
   /**
    * Recherchez les périphériques Bluetooth disponibles, évaluez s'il est possible d'utiliser la fonctionnalité
    * Bluetooth sur l'appareil.
@@ -61,21 +121,23 @@ export class BluetoothPage {
    */
   buscarBluetooth(): Promise<Object> {
     return new Promise((resolve, reject) => {
-      this.bluetoothSerial.isEnabled().then(success =>{
-        this.bluetoothSerial.discoverUnpaired().then(success => {
-          if (success.length > 0) {
-            resolve(success);
-          } else {
-            reject('Aucun appareil trouvé');
-          }
-        }).catch((error) => {
-          console.log(`[1] Error: ${JSON.stringify(error)}`);
-          reject('Bluetooth non disponible sur cette plateforme');
-        });
-      }, fail => {
-        console.log(`[2] Error: ${JSON.stringify(fail)}`);
-        reject("Bluetooth n'est pas disponible ou est désactivé");
-      });
+      this.bluetoothSerial.isEnabled().then(
+        success =>{
+          this.bluetoothSerial.discoverUnpaired().then(success => {
+            if (success.length > 0) {
+              resolve(success);
+            } else {
+              reject('Aucun appareil trouvé');
+            }
+          }).catch((error) => {
+            console.log(`[1] Error: ${JSON.stringify(error)}`);
+            reject('Bluetooth non disponible sur cette plateforme');
+          });
+        }, fail => {
+          console.log(`[2] Error: ${JSON.stringify(fail)}`);
+          reject("Bluetooth n'est pas disponible ou est désactivé");
+        }
+      );
     });
   }
   /**

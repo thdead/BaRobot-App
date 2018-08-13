@@ -1,4 +1,3 @@
-import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { Component, ViewChild } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Slides } from 'ionic-angular/index';
@@ -14,16 +13,12 @@ import { Slides } from 'ionic-angular/index';
 export class HomePage {
   @ViewChild(Slides) slides: Slides;
 
-  constructor(public navCtrl: NavController, private androidPermissions: AndroidPermissions) {
+  constructor(public navCtrl: NavController) {
 
   }
 
   ngAfterViewInit() {
       // this.slides.lockSwipes(true);
-      this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.CAMERA).then(
-        result => console.log('Has permission?',result.hasPermission),
-        err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.CAMERA)
-      );
   }
 
   public goToSlide(num,speed) {
