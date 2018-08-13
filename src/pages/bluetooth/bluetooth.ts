@@ -1,5 +1,5 @@
 import { Component, Injectable } from '@angular/core';
-import { Platform, ToastController, AlertController, Refresher } from 'ionic-angular';
+import { ToastController, AlertController, Refresher, LoadingController } from 'ionic-angular';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
 import { Observable } from 'rxjs';
 import { ISubscription } from "rxjs/Subscription";
@@ -18,6 +18,8 @@ export class BluetoothPage {
 
   toSend: string = "";
   listOfDevices: Array<any> = [];
+  loading;
+  
 
   devices: Array<any> = [];
   mostrarSpiner = true;
@@ -29,27 +31,9 @@ export class BluetoothPage {
 
 
 
-  constructor(
-    private platform: Platform,
-    private toastCtrl: ToastController,
-    private alertCtrl: AlertController,
-    private bluetoothSerial: BluetoothSerial
-  ) { }
-  /**
-   * En entrant dans la fenêtre, il exécute la fonction de recherche des périphériques Bluetooth.
-   */
-  ionViewDidEnter() {
-    console.log('Recherche de périférique')
-    this.platform.ready().then(() => {
-      this.buscarBluetooth().then((success: Array<Object>) => {
-        this.devices = success;
-        this.mostrarSpiner = false;
-      }, fail => {
-        this.presentToast(fail);
-        this.mostrarSpiner = false;
-      });
-    });
-  }
+  constructor(private toastCtrl: ToastController, private alertCtrl: AlertController, private bluetoothSerial: BluetoothSerial, private loadingCtrl: LoadingController) { }
+
+
   /**
    * Lors de la fermeture de l'application, il s'assure que la connexion Bluetooth est fermée.
    */
@@ -57,33 +41,104 @@ export class BluetoothPage {
     this.desconectar();
   }
 
+
  /**
  * ------------------------------------------------------------------------------------------------------------------------------
  * ------------------------------------------------------------------------------------------------------------------------------
  * ------------------------------------------------------------------------------------------------------------------------------
  */
 
-// edit l'input text
-public editInput(){
-  this.toSend = 'Bonjour';
+
+// alerte pour demander d'activer le bluetooth
+alertBluetooth() {
+  let alert = this.alertCtrl.create({
+    title: 'Bluetooth',
+    message: 'Voulez vous activer le Bluetooth ?',
+    buttons: [
+      {
+        text: 'Oui',
+        handler: () => {
+          this.enableBluetooth();
+        }
+      },
+      {
+        text: 'Non',
+        handler: () => {
+          console.log('Close');
+        }
+      }
+    ]
+  });
+  alert.present();
+}
+
+// créer un loader
+startLoaderBt() {
+  this.loading = this.loadingCtrl.create({
+    content: 'Recherche de périphériques Bluetooth...'
+  });
+
+  this.loading.present();
+}
+stopLoaderBt() {
+  this.loading.dismiss();
+}
+
+
+alertBluetoothConnect() {
+  let tempArray;
+  this.listOfDevices.forEach(device => {
+      tempArray.push({
+        type: "radio",
+        label: device.name,
+        value: device.id
+      })
+    
+  });
+
+
+  let alert = this.alertCtrl.create({
+    title: 'Bluetooth',
+    message: 'Select option ',
+    inputs : tempArray,
+    buttons : [
+    {
+        text: "Cancel",
+        handler: data => {
+        console.log("cancel clicked");
+        }
+    },
+    {
+        text: "Search",
+        handler: data => {
+        console.log("search clicked");
+        }
+    }]});
+    alert.present();
 }
 
  // test si le bluetooth est activé, si non il va proposer de l'activé
-  public isEnable() {
+  public isBtEnable() {
     this.bluetoothSerial.isEnabled().then(
       success =>{
         this.toSend = "Bluetooth is enabled";
+        this.alertBluetoothConnect();
       },
       fail => {
         this.toSend = "Bluetooth is *not* enabled";
-        this.bluetoothSerial.enable().then(
-          success =>{
-            this.toSend ="Bluetooth is now enabled";
-          },
-          fail => {
-            this.toSend = "The user did *not* enable Bluetooth";
-          }
-        );
+        this.alertBluetooth();
+      }
+    );
+  }
+
+// active le bluetooth
+  public enableBluetooth() {
+    this.bluetoothSerial.enable().then(
+      success =>{
+        this.toSend ="Bluetooth is now enabled";
+      },
+      fail => {
+        this.toSend = "The user did *not* enable Bluetooth";
       }
     );
   }
@@ -91,6 +146,7 @@ public editInput(){
 // cherche les périphériques disponibles
 
   public foundBluethooth(){
+    this.startLoaderBt();
     this.bluetoothSerial.isEnabled().then(
       success =>{
         this.toSend = "Bluetooth is enabled";
@@ -99,6 +155,7 @@ public editInput(){
           success => {
             this.listOfDevices = success;
             this.toSend = "Done";
+            this.alertBluetoothConnect();
           }
         );
       },
@@ -106,6 +163,7 @@ public editInput(){
         this.toSend = "Bluetooth is *not* enabled";
       }
     );
+    this.stopLoaderBt();
   }
 
 /**
