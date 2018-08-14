@@ -12,25 +12,25 @@
     
     <ion-row align-items-center justify-content-center  >
 
-      <ion-col col-4 >
+      <ion-col col-4 (click)="edit(0)">
         <span>
-            <ion-icon name="custom-bottle" color="primary" class="iconApp"></ion-icon>
+            <ion-icon name="custom-bottle" [color]="bottleLoad[0].color" class="iconApp"></ion-icon>
           <br>
-          Bt1
+          {{bottleLoad[0].name}}
         </span>
       </ion-col>
-      <ion-col col-4 >
+      <ion-col col-4 (click)="edit(1)">
         <span>
-            <ion-icon name="custom-bottle" color="primary" class="iconApp"></ion-icon>
+            <ion-icon name="custom-bottle" [color]="bottleLoad[1].color" class="iconApp"></ion-icon>
           <br>
-          Bt2
+          {{bottleLoad[1].name}}
         </span>
       </ion-col>
-      <ion-col col-4 >
+      <ion-col col-4 (click)="edit(2)">
         <span>
-            <ion-icon name="custom-bottle" color="primary" class="iconApp"></ion-icon>
+            <ion-icon name="custom-bottle" [color]="bottleLoad[2].color" class="iconApp"></ion-icon>
           <br>
-          Bt3
+          {{bottleLoad[2].name}}
         </span>
       </ion-col>
 
@@ -38,27 +38,27 @@
     <br>
     <ion-row align-items-center justify-content-center  >
 
-      <ion-col col-4 >
-        <span>
-            <ion-icon name="custom-bottle" color="primary" class="iconApp"></ion-icon>
-          <br>
-          Bt4
-        </span>
-      </ion-col>
-      <ion-col col-4 >
-        <span>
-            <ion-icon name="custom-bottle" color="primary" class="iconApp"></ion-icon>
-          <br>
-          Bt5
-        </span>
-      </ion-col>
-      <ion-col col-4 >
-        <span>
-            <ion-icon name="custom-bottle" color="#001122" class="iconApp"></ion-icon>
-          <br>
-          Bt6
-        </span>
-      </ion-col>
+        <ion-col col-4 (click)="edit(3)">
+          <span>
+              <ion-icon name="custom-bottle" [color]="bottleLoad[3].color" class="iconApp"></ion-icon>
+            <br>
+            {{bottleLoad[3].name}}
+          </span>
+        </ion-col>
+        <ion-col col-4 (click)="edit(4)">
+          <span>
+              <ion-icon name="custom-bottle" [color]="bottleLoad[4].color" class="iconApp"></ion-icon>
+            <br>
+            {{bottleLoad[4].name}}
+          </span>
+        </ion-col>
+        <ion-col col-4 (click)="edit(5)">
+          <span>
+              <ion-icon name="custom-bottle" [color]="bottleLoad[5].color" class="iconApp"></ion-icon>
+            <br>
+            {{bottleLoad[5].name}}
+          </span>
+        </ion-col>
 
     </ion-row>
   </ion-grid>

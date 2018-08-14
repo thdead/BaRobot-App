@@ -1,8 +1,6 @@
 import { Component, Injectable } from '@angular/core';
-import { ToastController, AlertController, Refresher, LoadingController } from 'ionic-angular';
+import { ToastController, AlertController, LoadingController } from 'ionic-angular';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
-import { Observable } from 'rxjs';
-import { ISubscription } from "rxjs/Subscription";
 
 /**
  * Cette classe gère la connectivité Bluetooth
@@ -24,6 +22,14 @@ export class BluetoothPage {
   connectedDeviceName: string = "";
   connectedDeviceId: string = "";
   
+  listOfDrink: Array<any> = [
+    {name:"Jus D'orange", color:'orange'},
+    {name:"Jus D'orange", color:'green'},
+    {name:"Jus D'orange", color:'orange'},
+    {name:"Jus D'orange", color:'orange'},
+    {name:"Jus D'orange", color:'green'},
+    {name:"Jus D'orange", color:'orange'}
+  ];
 
   constructor(private toastCtrl: ToastController, private alertCtrl: AlertController, private bluetoothSerial: BluetoothSerial, private loadingCtrl: LoadingController) { }
 

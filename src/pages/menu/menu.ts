@@ -25,9 +25,6 @@ export class MenuPage {
 
   goToSlide(num,speed) {
     this.homePage.goToSlide(num,speed);
-    if(num == 2) {
-      this.bluetoothPage.isBtEnable();
-    }
   }
 
 }

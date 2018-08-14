@@ -13,6 +13,24 @@
 
 <ion-grid>
   <ion-row>
+      <ion-col col-2>
+          <ion-icon name="custom-bottle" color="primary" class="iconApp"></ion-icon>
+          <ion-icon name="custom-bottle" color="primary" class="iconApp"></ion-icon>
+          <ion-icon name="custom-bottle" color="primary" class="iconApp"></ion-icon>
+      </ion-col>
+      <ion-col col-8 id='glassZone'>
+        <ion-icon name="custom-g" id="cg"></ion-icon>
+        <ion-icon *ngFor="let item of listOfDrink ; let i = index" class="glassfill" name="custom-g{{i+1}}" [ngStyle]="{'top': 217-(i*62) + 'px','color' : item.color}" (click)="createToast(i+1)">
+          <span style="padding: 5px; color: white; text-shadow: 0px 0px 2px #000 ;">{{item.name}}</span>
+        </ion-icon>
+      </ion-col>
+      <ion-col col-2>
+          <ion-icon name="custom-bottle" color="primary" class="iconApp"></ion-icon>
+          <ion-icon name="custom-bottle" color="primary" class="iconApp"></ion-icon>
+          <ion-icon name="custom-bottle" color="primary" class="iconApp"></ion-icon>
+      </ion-col>
+  </ion-row>
+  <ion-row>
     <ion-input type="text" placeholder="Input To Send" name="toSend" [(ngModel)]="toSend"></ion-input>
     <ion-icon name="send" class="icoSend" (click)="sendMessage()"></ion-icon>
   </ion-row>

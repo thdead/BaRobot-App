@@ -60,6 +60,35 @@ ion-icon {
     &[class*="custom-bottle"] {
         mask-image: url(../assets/bottle.svg);
     }
+
+    &[class*="custom-g"] {
+        mask-image: url(../assets/g0.svg);
+    }
+    &[class*="custom-g1"] {
+        mask-image: url(../assets/g1.svg);
+    }
+    &[class*="custom-g2"] {
+        mask-image: url(../assets/g2.svg);
+    }
+    &[class*="custom-g3"] {
+        mask-image: url(../assets/g3.svg);
+    }
+    &[class*="custom-g4"] {
+        mask-image: url(../assets/g4.svg);
+    }
+    &[class*="custom-g5"] {
+        mask-image: url(../assets/g5.svg);
+    }
+    &[class*="custom-g6"] {
+        mask-image: url(../assets/g6.svg);
+    }
+    &[class*="custom-g7"] {
+        mask-image: url(../assets/g7.svg);
+    }
+    &[class*="custom-g8"] {
+        mask-image: url(../assets/g8.svg);
+    }
+
 }
 
 
@@ -79,3 +108,25 @@ ion-icon {
     margin-top: 0.5px;
 }
 
+
+#cg {
+    width: 200px;
+    height: 260px;
+    position:absolute;
+    z-index: 10;
+    pointer-events:none;
+    margin: 0 8px;
+}
+
+.col .glassfill {
+    width: 216px;
+    height: 32px;
+    position:relative;
+    z-index:1;
+    vertical-align: middle;
+    padding: 5px;
+}
+
+#glassZone {
+    height: 290px;
+}
