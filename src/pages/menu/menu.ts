@@ -1,7 +1,9 @@
+import { BluetoothPage } from './../bluetooth/bluetooth';
 import { ConfigPage } from './../config/config';
 import { HomePage } from './../home/home';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+
 
 
 @IonicPage()
@@ -11,9 +13,11 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class MenuPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private homePage: HomePage) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private homePage: HomePage, private bluetoothPage: BluetoothPage) {
     
   }
+
+
 
   goToConfig() {
     this.navCtrl.push(ConfigPage);
@@ -21,6 +25,9 @@ export class MenuPage {
 
   goToSlide(num,speed) {
     this.homePage.goToSlide(num,speed);
+    if(num == 2) {
+      this.bluetoothPage.isBtEnable();
+    }
   }
 
 }

@@ -2,9 +2,10 @@
 
   <ion-navbar [color]="this.isConnected ? 'light' : 'dark'">
     
-    <ion-title>
+    <ion-title (click)="isBtEnable()">
       <span class="top">{{isConnected ? connectedDeviceName+" ("+connectedDeviceId+") ": "Aucun périphérique connecté"}}</span>  &nbsp;
-      <ion-icon name="checkmark-circle" class="onOff" [color]="this.isConnected ? 'on' : 'off'"></ion-icon>
+      <ion-icon [hidden]=this.isConnected name="power"    [color]="this.isConnected ? 'on' : 'off'" class="onOff" ></ion-icon>
+      <ion-icon [hidden]=!this.isConnected name="refresh" [color]="this.isConnected ? 'on' : 'off'" class="onOff" ></ion-icon>
     </ion-title>
   </ion-navbar>
 
@@ -12,12 +13,9 @@
 
 <ion-grid>
   <ion-row>
-    <ion-input type="text" placeholder="Input To Send" disabled="true" name="toSend" [(ngModel)]="toSend"></ion-input><ion-icon name="send" class="icoSend"></ion-icon>
-  </ion-row>
-  <ion-row>
-    <ion-col col-12 (click)="isBtEnable()">
-      <ion-icon name="power" [color]="this.isConnected ? 'on' : 'off'" class="iconApp" ></ion-icon>
-    </ion-col>
+    <ion-input type="text" placeholder="Input To Send" name="toSend" [(ngModel)]="toSend"></ion-input>
+    <ion-icon name="send" class="icoSend" (click)="sendMessage()"></ion-icon>
   </ion-row>
 
 </ion-grid>
+

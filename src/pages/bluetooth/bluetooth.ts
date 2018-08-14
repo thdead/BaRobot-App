@@ -60,6 +60,9 @@ export class BluetoothPage {
         this.isConnectedTo();
       },
       fail => {
+        this.connectedDeviceName = '';
+        this.connectedDeviceId = '';
+        this.isConnected = false;
         this.createToast("Bluetooth is *not* enabled");
         this.alertBluetooth();
       }
@@ -154,7 +157,7 @@ export class BluetoothPage {
           text: "Connecter",
           handler: data => {
             this.connectedDeviceName = data.name;
-            this.connectedDeviceName = data.id;
+            this.connectedDeviceId = data.id;
 
             this.createToast("Radio button selected : " + data.id);
             this.connectTo(data.id);
@@ -186,13 +189,41 @@ export class BluetoothPage {
       },
       failure => {
         this.connectedDeviceName = '';
-        this.connectedDeviceName = '';
+        this.connectedDeviceId = '';
         this.isConnected = false;
         this.createToast('No device connected');
         this.foundBluethooth();
       }
     );
   }
+
+  /**
+   * ------------------------------------------------------------------------------------------------------------------------------
+  **/
+
+  sendMessage() {
+    this.bluetoothSerial.isConnected().then(
+      succes => {
+        this.createToast("Msg to send : " + this.toSend);
+        this.bluetoothSerial.write(this.toSend).then( 
+          success =>{
+            this.createToast("Msg Send");
+          },
+          failure => {
+            this.createToast("Msg fail, can't send");
+          }
+        );
+        this.toSend = '';
+      },
+      fail => {
+        this.createToast("You can't send message if you are not connected");
+        this.toSend = '';
+      }
+    );
+    
+    
+  }
+  
 
   /**
    * ------------------------------------------------------------------------------------------------------------------------------
