@@ -3,7 +3,7 @@
   <ion-navbar [color]="this.isConnected ? 'light' : 'dark'">
     
     <ion-title>
-      <span class="top">BarRobot (00:14:03:05:5A:1D)</span>  &nbsp;
+      <span class="top">{{isConnected ? connectedDeviceName+" ("+connectedDeviceId+") ": "Aucun périphérique connecté"}}</span>  &nbsp;
       <ion-icon name="checkmark-circle" class="onOff" [color]="this.isConnected ? 'on' : 'off'"></ion-icon>
     </ion-title>
   </ion-navbar>
@@ -16,7 +16,7 @@
   </ion-row>
   <ion-row>
     <ion-col col-12 (click)="isBtEnable()">
-      <ion-icon name="power" color="primary" class="iconApp" ></ion-icon>
+      <ion-icon name="power" [color]="this.isConnected ? 'on' : 'off'" class="iconApp" ></ion-icon>
     </ion-col>
   </ion-row>
 

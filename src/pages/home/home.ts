@@ -19,11 +19,14 @@ export class HomePage {
 
   ngAfterViewInit() {
       // this.slides.lockSwipes(true);
+      this.slides.lockSwipeToNext(true);
   }
 
   public goToSlide(num,speed) {
     // this.slides.lockSwipes(false);
+    this.slides.lockSwipeToNext(false);
     this.slides.slideTo(num, speed);
+    this.slides.lockSwipeToNext(true);
     // this.slides.lockSwipes(true);
   }
 

@@ -21,6 +21,8 @@ export class BluetoothPage {
   tempArray: Array<any>;
   loading;
   isConnected:Boolean = false;
+  connectedDeviceName: string = "";
+  connectedDeviceId: string = "";
   
 
   devices: Array<any> = [];
@@ -40,7 +42,7 @@ export class BluetoothPage {
    * Lors de la fermeture de l'application, il s'assure que la connexion Bluetooth est fermée.
    */
   public ngOnDestroy() {
-    this.desconectar();
+    this.bluetoothSerial.disconnect();
   }
 
 
@@ -51,11 +53,11 @@ export class BluetoothPage {
  */
 
   // test si le bluetooth est activé
-  isBtEnable() {
+  public isBtEnable() {
     this.bluetoothSerial.isEnabled().then(
       success =>{
         this.createToast("Bluetooth is enabled");
-        this.foundBluethooth();
+        this.isConnectedTo();
       },
       fail => {
         this.createToast("Bluetooth is *not* enabled");
@@ -101,7 +103,7 @@ export class BluetoothPage {
 
   // cherche les périphériques disponibles
   foundBluethooth(){
-    this.startLoaderBt();
+    this.startLoaderBt('Recherche de périphériques Bluetooth...');
     this.bluetoothSerial.isEnabled().then(
       success =>{
         this.createToast("Bluetooth is enabled");
@@ -133,7 +135,7 @@ export class BluetoothPage {
     let tempArray:Array <any> = [];
     this.listOfDevices.forEach(
       device => {
-        tempArray.push({type:'radio',label: device.name + ' (' + device.id + ')',value:device.id})
+        tempArray.push({type:'radio',label: device.name + ' (' + device.id + ')',value:device})
       }
     );
 
@@ -151,35 +153,55 @@ export class BluetoothPage {
       {
           text: "Connecter",
           handler: data => {
-          this.createToast("Radio button selected : " + data);
-          this.connectTo(data);
+            this.connectedDeviceName = data.name;
+            this.connectedDeviceName = data.id;
+
+            this.createToast("Radio button selected : " + data.id);
+            this.connectTo(data.id);
           }
       }]});
       alert.present();
   }
 
   connectTo(id) {
+    this.startLoaderBt('Connexion au périphérique en cours...');
     this.bluetoothSerial.connect(id).subscribe(
       succes => {
         this.createToast('connected');
-        this.isConnected = true;
+        this.isConnectedTo();
+        this.stopLoaderBt();
       },
       fail => {
         this.createToast(`Erreur de connexion: ${JSON.stringify(fail)}`);
+        this.stopLoaderBt();
       }
     );
   }
 
-
+  isConnectedTo(){
+    this.bluetoothSerial.isConnected().then(
+      succes => {
+        this.createToast('Device connected, status : ' + succes);
+        this.isConnected = true;
+      },
+      failure => {
+        this.connectedDeviceName = '';
+        this.connectedDeviceName = '';
+        this.isConnected = false;
+        this.createToast('No device connected');
+        this.foundBluethooth();
+      }
+    );
+  }
 
   /**
    * ------------------------------------------------------------------------------------------------------------------------------
   **/
 
   // créer un loader
-  startLoaderBt() {
+  startLoaderBt(msg) {
     this.loading = this.loadingCtrl.create({
-      content: 'Recherche de périphériques Bluetooth...'
+      content: msg
     });
 
     this.loading.present();
