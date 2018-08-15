@@ -12,22 +12,21 @@
 </ion-header>
 
 <ion-grid>
+  <ion-row align-items-center justify-content-center  >
+    <ion-col col-4 *ngFor="let item of home.bottleLoad ;let i = index">
+      <span (click)='fillGlass(i)'>
+          <ion-icon name="custom-bottle" [color]="home.bottleLoad[i].color" class="iconApp"></ion-icon>
+        <br>
+        {{home.bottleLoad[i].name}}
+      </span>
+    </ion-col>
+  </ion-row>
   <ion-row>
-      <ion-col col-2>
-          <ion-icon name="custom-bottle" color="primary" class="iconApp"></ion-icon>
-          <ion-icon name="custom-bottle" color="primary" class="iconApp"></ion-icon>
-          <ion-icon name="custom-bottle" color="primary" class="iconApp"></ion-icon>
-      </ion-col>
-      <ion-col col-8 id='glassZone'>
+      <ion-col col-12 id='glassZone'>
         <ion-icon name="custom-g" id="cg"></ion-icon>
-        <ion-icon *ngFor="let item of listOfDrink ; let i = index" class="glassfill" name="custom-g{{i+1}}" [ngStyle]="{'top': 217-(i*62) + 'px','color' : item.color}" (click)="createToast(i+1)">
+        <ion-icon *ngFor="let item of listOfDrink ; let i = index" class="glassfill" name="custom-g{{i+1}}" [ngStyle]="{'top': 217-(i*62) + 'px'}" [color]='item.color' (click)="drainGlass(i)">
           <span style="padding: 5px; color: white; text-shadow: 0px 0px 2px #000 ;">{{item.name}}</span>
         </ion-icon>
-      </ion-col>
-      <ion-col col-2>
-          <ion-icon name="custom-bottle" color="primary" class="iconApp"></ion-icon>
-          <ion-icon name="custom-bottle" color="primary" class="iconApp"></ion-icon>
-          <ion-icon name="custom-bottle" color="primary" class="iconApp"></ion-icon>
       </ion-col>
   </ion-row>
   <ion-row>

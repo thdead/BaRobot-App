@@ -1,7 +1,7 @@
+import { HomePage } from './../home/home';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
-
 
 
 @IonicPage()
@@ -11,68 +11,23 @@ import { AlertController } from 'ionic-angular';
 })
 export class ConfigPage {
 
-  listOfDrink: Array<any> = [
-    {name:'Whisky'},
-    {name:'Tequila'},
-    {name:'Vodka'},
-    {name:'Gin'},
-    {name:'Rhum'},
-    {name:'Rhum Blanc'},
-    {name:'Rhum Brun'},
-
-    {name:'Vin Blanc'},
-    
-    {name:'Jus de citron'},
-    {name:'Tonic'},
-    {name:'Limonade'},
-    {name:'Jus de citron vert'},
-    {name:'Coca-Cola'},
-    {name:'Eau Pétillante'},
-    {name:'Sucre de Canne'},
-    {name:"Jus D'orange"},
-    {name:"Jus De Pomme"},
-    {name:"Grenadine"},
-  ];
-
-  listOfColor: Array<any> = [
-    {name:'Orange'      , value:'org'},
-    {name:'Vert clair'  , value:'vrtCl'},
-    {name:'Vert foncé'  , value:'vrtFc'},
-    {name:'Turquoise'   , value:'turq'},
-    {name:'Brun'        , value:'brn'},
-    {name:'Blanc'       , value:'blnc'},
-    {name:'Jaune'       , value:'jne'},
-    {name:'Rouge'       , value:'rge'},
-    {name:'Blanc Cassé' , value:'blnKc'},
-    {name:'Rose'        , value:'rse'},
-    {name:'Transparent' , value:'trpnt'},
-  ];
-
-  bottleLoad: Array<any> = 
-  [
-    {name:'Vide',color:'blc'},
-    {name:'Vide',color:'blc'},
-    {name:'Vide',color:'blc'},
-    {name:'Vide',color:'blc'},
-    {name:'Vide',color:'blc'},
-    {name:'Vide',color:'blc'}
-  ];
-
-  constructor(public navCtrl: NavController, public navParams: NavParams,private alertCtrl: AlertController) {
+  constructor( private alertCtrl: AlertController,public home: HomePage) {
   }
+
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ConfigPage');
   }
 
-  edit(num) {
-    
-    this.listDeBoisson(num);
+  save() {
+    this.home.saveAll();    
+    this.home.slides.lockSwipes(false);
+    this.home.goToSlide(1,1);
   }
 
   listDeBoisson(num) {
     let tempArray:Array <any> = [];
-    this.listOfDrink.forEach(
+    this.home.listOfDrink.forEach(
       drink => {
         tempArray.push({type:'radio',label: drink.name ,value:drink.name})
       }
@@ -92,14 +47,12 @@ export class ConfigPage {
       {
           text: "Choisir",
           handler: data => {
-            console.log(data)
             if(!data) {
-              this.bottleLoad[num].name = 'Vide';
+              this.home.bottleLoad[num].name = 'Vide';
             } else {
-              this.bottleLoad[num].name = data;
+              this.home.bottleLoad[num].name = data;
               this.listDeCouleurs(num);
             }
-            
           }
       }]});
       alert.present();
@@ -107,7 +60,7 @@ export class ConfigPage {
 
   listDeCouleurs(num) {
     let tempArray:Array <any> = [];
-    this.listOfColor.forEach(
+    this.home.listOfColor.forEach(
       color => {
         tempArray.push({type:'radio',label: color.name ,value:color.value})
       }
@@ -128,11 +81,11 @@ export class ConfigPage {
           text: "Choisir",
           handler: data => {
             if(!data) {
-              this.bottleLoad[num].color = 'blc';
+              this.home.bottleLoad[num].color = 'blc';
             } else {
-              this.bottleLoad[num].color = data;
+              this.home.bottleLoad[num].color = data;
             }
-            
+            this.home.saveAll();
           }
       }]});
       alert.present();

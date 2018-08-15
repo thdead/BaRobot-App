@@ -1,8 +1,6 @@
-import { BluetoothPage } from './../bluetooth/bluetooth';
-import { ConfigPage } from './../config/config';
 import { HomePage } from './../home/home';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage} from 'ionic-angular';
 
 
 
@@ -13,18 +11,17 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class MenuPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private homePage: HomePage, private bluetoothPage: BluetoothPage) {
+  constructor( private homePage: HomePage) {
     
-  }
-
-
-
-  goToConfig() {
-    this.navCtrl.push(ConfigPage);
   }
 
   goToSlide(num,speed) {
     this.homePage.goToSlide(num,speed);
+  }
+
+  goToConf() {
+    this.goToSlide(3,1);
+    this.homePage.slides.lockSwipes(true);
   }
 
 }

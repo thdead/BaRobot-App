@@ -1,3 +1,4 @@
+import { HomePage } from './../home/home';
 import { Component, Injectable } from '@angular/core';
 import { ToastController, AlertController, LoadingController } from 'ionic-angular';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
@@ -22,16 +23,9 @@ export class BluetoothPage {
   connectedDeviceName: string = "";
   connectedDeviceId: string = "";
   
-  listOfDrink: Array<any> = [
-    {name:"Jus D'orange", color:'orange'},
-    {name:"Jus D'orange", color:'green'},
-    {name:"Jus D'orange", color:'orange'},
-    {name:"Jus D'orange", color:'orange'},
-    {name:"Jus D'orange", color:'green'},
-    {name:"Jus D'orange", color:'orange'}
-  ];
+  listOfDrink: Array<any> = [];
 
-  constructor(private toastCtrl: ToastController, private alertCtrl: AlertController, private bluetoothSerial: BluetoothSerial, private loadingCtrl: LoadingController) { }
+  constructor(private toastCtrl: ToastController, private alertCtrl: AlertController, private bluetoothSerial: BluetoothSerial, private loadingCtrl: LoadingController, private home:HomePage) { }
 
 
   /**
@@ -217,7 +211,40 @@ export class BluetoothPage {
       }
     ); 
   }
+
+  generateString(){
+    this.toSend = 'B';
+    this.listOfDrink.forEach(
+      dose => {
+        this.toSend += dose.position + ";"
+      }
+    );
+   }
   
+
+  /**
+   * ------------------------------------------------------------------------------------------------------------------------------
+  **/
+
+ fillGlass(bottle){
+  if(this.listOfDrink.length == 8){
+    return;
+  }
+  this.listOfDrink.push(
+    {
+      name:this.home.bottleLoad[bottle].name,
+      color:this.home.bottleLoad[bottle].color,
+      position: bottle
+    }
+  );
+  this.generateString();
+ }
+
+ drainGlass(pos){
+   this.listOfDrink.splice(pos,1);
+   this.generateString();
+ }
+
 
   /**
    * ------------------------------------------------------------------------------------------------------------------------------

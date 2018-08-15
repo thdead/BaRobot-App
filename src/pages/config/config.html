@@ -6,60 +6,21 @@
 
 </ion-header>
 
+<ion-grid>
+  
+  <ion-row align-items-center justify-content-center  >
 
-<ion-content class="no-scroll">
-  <ion-grid style="height: 100%" style="margin-top: 50%" >
-    
-    <ion-row align-items-center justify-content-center  >
-
-      <ion-col col-4 (click)="edit(0)">
-        <span>
-            <ion-icon name="custom-bottle" [color]="bottleLoad[0].color" class="iconApp"></ion-icon>
-          <br>
-          {{bottleLoad[0].name}}
-        </span>
-      </ion-col>
-      <ion-col col-4 (click)="edit(1)">
-        <span>
-            <ion-icon name="custom-bottle" [color]="bottleLoad[1].color" class="iconApp"></ion-icon>
-          <br>
-          {{bottleLoad[1].name}}
-        </span>
-      </ion-col>
-      <ion-col col-4 (click)="edit(2)">
-        <span>
-            <ion-icon name="custom-bottle" [color]="bottleLoad[2].color" class="iconApp"></ion-icon>
-          <br>
-          {{bottleLoad[2].name}}
-        </span>
-      </ion-col>
-
-    </ion-row>
-    <br>
-    <ion-row align-items-center justify-content-center  >
-
-        <ion-col col-4 (click)="edit(3)">
-          <span>
-              <ion-icon name="custom-bottle" [color]="bottleLoad[3].color" class="iconApp"></ion-icon>
-            <br>
-            {{bottleLoad[3].name}}
-          </span>
-        </ion-col>
-        <ion-col col-4 (click)="edit(4)">
-          <span>
-              <ion-icon name="custom-bottle" [color]="bottleLoad[4].color" class="iconApp"></ion-icon>
-            <br>
-            {{bottleLoad[4].name}}
-          </span>
-        </ion-col>
-        <ion-col col-4 (click)="edit(5)">
-          <span>
-              <ion-icon name="custom-bottle" [color]="bottleLoad[5].color" class="iconApp"></ion-icon>
-            <br>
-            {{bottleLoad[5].name}}
-          </span>
-        </ion-col>
-
-    </ion-row>
-  </ion-grid>
-</ion-content>
+    <ion-col col-4 *ngFor="let item of home.bottleLoad ;let i = index" >
+      <span (click)="listDeBoisson(i)">
+          <ion-icon name="custom-bottle" [color]="home.bottleLoad[i].color" class="iconApp"></ion-icon>
+        <br>
+        {{home.bottleLoad[i].name}}
+      </span>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col col-12>
+      <button ion-button round (click)="save();">Save</button>
+    </ion-col>
+  </ion-row>
+</ion-grid>
