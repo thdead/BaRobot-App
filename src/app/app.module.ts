@@ -1,3 +1,4 @@
+import { SplashScreen } from '@ionic-native/splash-screen';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
@@ -34,6 +35,7 @@ import { BluetoothPage } from './../pages/bluetooth/bluetooth';
     BluetoothPage
   ],
   providers: [
+    SplashScreen,
     HomePage,
     BluetoothPage,
     BluetoothSerial,
