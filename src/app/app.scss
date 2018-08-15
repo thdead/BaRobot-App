@@ -27,7 +27,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(steelblue, beige);
+    background: #1c1c2c;
 }
 
 .spinner {
@@ -39,7 +39,7 @@
   }
   
   .spinner > div {
-    background-color: #333;
+    background-color: map-get($colors, secondary);
     height: 100%;
     width: 6px;
     display: inline-block;
@@ -48,7 +48,14 @@
     animation: sk-stretchdelay 1.2s infinite ease-in-out;
   }
   
+  .spinner .rect1 {
+    background-color: map-get($colors, third);
+    -webkit-animation-delay: -1.1s;
+    animation-delay: -1.1s;
+  }
+
   .spinner .rect2 {
+    background-color: map-get($colors, primary);
     -webkit-animation-delay: -1.1s;
     animation-delay: -1.1s;
   }
@@ -59,11 +66,13 @@
   }
   
   .spinner .rect4 {
+    background-color: map-get($colors, primary);
     -webkit-animation-delay: -0.9s;
     animation-delay: -0.9s;
   }
   
   .spinner .rect5 {
+    background-color: map-get($colors, third);
     -webkit-animation-delay: -0.8s;
     animation-delay: -0.8s;
   }
@@ -86,7 +95,7 @@
 //----------------------------------------------------------
 //----------------------------------------------------------
 *{
-    color: #adadad;
+    color: #c6c6c6;
 }
 
 ion-slide {
