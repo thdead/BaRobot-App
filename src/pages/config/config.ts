@@ -26,6 +26,7 @@ export class ConfigPage {
   }
 
   listDeBoisson(num) {
+    let tempPos = num+1;
     let tempArray:Array <any> = [];
     this.home.listOfDrink.forEach(
       drink => {
@@ -35,7 +36,7 @@ export class ConfigPage {
 
     let alert = this.alertCtrl.create({
       title: 'Boissons',
-      message: 'Selectionner la boisson n°' + num+1,
+      message: 'Selectionner la boisson n°' + tempPos,
       inputs : tempArray,
       buttons : [
       {
@@ -59,6 +60,7 @@ export class ConfigPage {
   }
 
   listDeCouleurs(num) {
+    let tempPos = num+1;
     let tempArray:Array <any> = [];
     this.home.listOfColor.forEach(
       color => {
@@ -68,7 +70,7 @@ export class ConfigPage {
 
     let alert = this.alertCtrl.create({
       title: 'Couleur',
-      message: 'Selectionner la Couleur n°' + num+1,
+      message: 'Selectionner la Couleur n°' + tempPos,
       inputs : tempArray,
       buttons : [
       {

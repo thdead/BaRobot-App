@@ -216,7 +216,7 @@ export class BluetoothPage {
     this.toSend = 'B';
     this.listOfDrink.forEach(
       dose => {
-        this.toSend += dose.position + ";"
+        this.toSend += dose.position + 1  + ";"
       }
     );
    }
