@@ -3,11 +3,7 @@ import { Component, Injectable } from '@angular/core';
 import { ToastController, AlertController, LoadingController } from 'ionic-angular';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
 
-/**
- * Cette classe gère la connectivité Bluetooth
- * @author Juan Lozoya <jlozoya1995@gmail.com>
- * @see [Bluetooth Serial](https://ionicframework.com/docs/native/bluetooth-serial/)
- */
+
 @Injectable()
 @Component({
   selector: 'bluetooth-page',
